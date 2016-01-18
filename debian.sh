@@ -21,9 +21,7 @@ if ! grep -q "$VERSION" debian/changelog; then
     exit 1
 fi
 
-if [ ! -f src/README.md ]; then
-    ./upstream-to-debian.sh
-fi
+./upstream-to-debian.sh
 
 make clean
 make
