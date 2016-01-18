@@ -14,8 +14,7 @@ source:
 install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/${APP}
 	cp -r src/* ${DESTDIR}${PREFIX}/${APP}
-	cp daemons/zeronet /etc/systemd/system/zeronet.service
-	cp daemons/tracker /etc/systemd/system/tracker.service
+	cp daemons/*.service /etc/systemd/system
 uninstall:
 	rm -rf ${PREFIX}/${APP}
     rm /etc/systemd/system/tracker.service

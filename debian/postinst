@@ -15,38 +15,6 @@ chown -R zeronet:zeronet /opt/zeronet
 # to do this, but on a purely local mesh the internet isn't available
 sed -i 's|fileserver_port = 0|fileserver_port = config.fileserver_port\n            sys.modules["main"].file_server.port_opened = True|g' /opt/zeronet/src/Site/Site.py
 
-echo '[Unit]' > /etc/systemd/system/zeronet.service
-echo 'Description=Zeronet Peer' >> /etc/systemd/system/zeronet.service
-echo 'After=syslog.target' >> /etc/systemd/system/zeronet.service
-echo 'After=network.target' >> /etc/systemd/system/zeronet.service
-echo '[Service]' >> /etc/systemd/system/zeronet.service
-echo 'Type=simple' >> /etc/systemd/system/zeronet.service
-echo 'User=zeronet' >> /etc/systemd/system/zeronet.service
-echo 'Group=zeronet' >> /etc/systemd/system/zeronet.service
-echo 'WorkingDirectory=/opt/zeronet' >> /etc/systemd/system/zeronet.service
-echo 'ExecStart=/usr/bin/python zeronet.py --ip_external $(hostname).local --trackers_file /opt/zeronet/bootstrap' >> /etc/systemd/system/zeronet.service
-echo '' >> /etc/systemd/system/zeronet.service
-echo 'TimeoutSec=300' >> /etc/systemd/system/zeronet.service
-echo '' >> /etc/systemd/system/zeronet.service
-echo '[Install]' >> /etc/systemd/system/zeronet.service
-echo 'WantedBy=multi-user.target' >> /etc/systemd/system/zeronet.service
-
-echo '[Unit]' > /etc/systemd/system/tracker.service
-echo 'Description=Torrent Tracker' >> /etc/systemd/system/tracker.service
-echo 'After=syslog.target' >> /etc/systemd/system/tracker.service
-echo 'After=network.target' >> /etc/systemd/system/tracker.service
-echo '[Service]' >> /etc/systemd/system/tracker.service
-echo 'Type=simple' >> /etc/systemd/system/tracker.service
-echo 'User=tracker' >> /etc/systemd/system/tracker.service
-echo 'Group=tracker' >> /etc/systemd/system/tracker.service
-echo 'WorkingDirectory=/opt/tracker' >> /etc/systemd/system/tracker.service
-echo "ExecStart=/usr/bin/bttrack --port $TRACKER_PORT --dfile /opt/tracker/dstate --logfile /opt/tracker/tracker.log --nat_check 0 --scrape_allowed full --ipv6_enabled 0" >> /etc/systemd/system/tracker.service
-echo '' >> /etc/systemd/system/tracker.service
-echo 'TimeoutSec=300' >> /etc/systemd/system/tracker.service
-echo '' >> /etc/systemd/system/tracker.service
-echo '[Install]' >> /etc/systemd/system/tracker.service
-echo 'WantedBy=multi-user.target' >> /etc/systemd/system/tracker.service
-
 useradd -d /opt/tracker/ -s /bin/false tracker
 if [ ! -d /opt/tracker ]; then
     mkdir /opt/tracker
