@@ -2,6 +2,12 @@
 
 cd /etc/share/zeronet
 
+zeronet_active=$(systemctl is-active zeronet)
+if [ $zeronet_active -eq 'active' ]; then
+	echo 'zeronet is active. Cannot start.'
+	exit 1
+fi
+
 # Hack to ensure that the file access port is opened
 # This is because zeronet normally relies on an internet site
 # to do this, but on a purely local mesh the internet isn't available

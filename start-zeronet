@@ -2,6 +2,12 @@
 
 cd /etc/share/zeronet
 
+mesh_active=$(systemctl is-active zeronet-mesh)
+if [ $mesh_active -eq 'active' ]]; then
+	echo 'zeronet-mesh is active. Cannot start.'
+	exit 1
+fi
+
 if [ ! -d /etc/tor ]; then
     /usr/bin/python zeronet.py
 else
