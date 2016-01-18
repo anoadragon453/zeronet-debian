@@ -13,6 +13,7 @@ source:
 	gzip -f9n ../${APP}_${VERSION}.orig.tar
 install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}
+	mkdir -m 755 -p ${DESTDIR}/var/lib/${APP}
 	touch src/* ${DESTDIR}${PREFIX}/share/${APP}/bootstrap
 	cp -r src/* ${DESTDIR}${PREFIX}/share/${APP}
 	cp daemons/*.service ${DESTDIR}/lib/systemd/system/
@@ -21,6 +22,7 @@ install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/man/man1
 	install -m 644 man/start-${APP}.1.gz ${DESTDIR}/usr/share/man/man1
 	install -m 644 man/start-${APP}-mesh.1.gz ${DESTDIR}/usr/share/man/man1
+	ln -s ${DESTDIR}/var/lib/${APP} ${DESTDIR}${PREFIX}/share/${APP}/data
 uninstall:
 	rm -rf ${PREFIX}/share/${APP}
 	rm /usr/bin/start-zeronet
@@ -30,6 +32,7 @@ uninstall:
 	rm /lib/systemd/system/zeronet-mesh.service
 	rm -f /usr/share/man/man1/start-${APP}.1.gz
 	rm -f /usr/share/man/man1/start-${APP}-mesh.1.gz
+	rm ${PREFIX}/share/${APP}/data
 clean:
 	rm -f \#* \.#* debian/*.substvars debian/*.log
 	rm -rf deb.* debian/${APP}

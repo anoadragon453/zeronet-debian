@@ -2,3 +2,4 @@
 /lib/systemd/system
 /usr/bin
 /usr/share/man/man1
+/var/lib/zeronet
