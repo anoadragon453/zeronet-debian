@@ -2,12 +2,12 @@
 
 SOURCE_FILE='README.md'
 ZERONET_REPO='https://github.com/HelloZeroNet/ZeroNet.git'
-ZERONET_COMMIT='e9d2cdfd37c135cf741992580512f0ea763c53a5'
+ZERONET_COMMIT='2121612a72e05d2fbe86cb707cae33687d4e72f1'
 UPSTREAM_DIR=~/.zeronet_package
 CURR_DIR=$(pwd)
 
 if [ $1 ]; then
-    ZERONET_COMMIT='e9d2cdfd37c135cf741992580512f0ea763c53a5'
+    ZERONET_COMMIT='2121612a72e05d2fbe86cb707cae33687d4e72f1'
 fi
 
 if [ ! -d gnu-social ]; then
@@ -39,6 +39,9 @@ rm src/src/lib/pyasn1/LICENSE
 rm src/src/lib/pyelliptic/LICENSE
 rm src/src/lib/rsa/LICENSE
 
+# Empty init
+echo '#!/usr/bin/python' > src/src/lib/PySocks/__init__.py
+
 # Make scripts executable
 executables=(
 	src/lib/pyelliptic/arithmetic.py
@@ -54,6 +57,21 @@ executables=(
 	src/lib/pybitcointools/bitcoin/ripemd.py
 	update.py
 	src/lib/pybitcointools/bitcoin/__init__.py
+    plugins/Sidebar/maxminddb/ipaddr.py
+	src/lib/PySocks/setup.py
+	src/lib/PySocks/sockshandler.py
+	src/lib/pybitcointools/bitcoin/bci.py
+	src/lib/pybitcointools/bitcoin/main.py
+	src/lib/pybitcointools/bitcoin/transaction.py
+	src/lib/pybitcointools/pybtctool
+	src/lib/pybitcointools/setup.py
+	src/lib/pyelliptic/cipher.py
+	src//src/lib/pyelliptic/ecc.py
+	src/lib/pyelliptic/hash.py
+	src/lib/pyelliptic/openssl.py
+	start.py
+	zeronet.py
+    src/lib/pyelliptic/ecc.py
 )
 for i in "${executables[@]}"
 do
@@ -63,9 +81,6 @@ do
 		sed -i '1s|^|#!/usr/bin/python\n|' $filename
 	fi
 done
-
-# Delete empty file
-rm src/src/lib/PySocks/__init__.py
 
 # Delete an offending binary
 rm -rf src/src/lib/PySocks/test

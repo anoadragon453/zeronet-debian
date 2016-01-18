@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python
 from .main import *
 from .transaction import *
 from .bci import *

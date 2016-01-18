@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+APP=zeronet
+
+if [ -d /etc/share/${APP} ]; then
+   rm -rf /etc/share/${APP}
+fi
+
+if [ -f /lib/systemd/system/tracker.service ]; then
+   rm /lib/systemd/system/tracker.service
+fi
+
+if [ -f /lib/systemd/system/${APP}.service ]; then
+   rm /lib/systemd/system/${APP}.service
+fi

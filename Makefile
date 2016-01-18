@@ -13,6 +13,7 @@ source:
 	gzip -f9n ../${APP}_${VERSION}.orig.tar
 install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}
+	touch src/* ${DESTDIR}${PREFIX}/share/${APP}/bootstrap
 	cp -r src/* ${DESTDIR}${PREFIX}/share/${APP}
 	cp daemons/*.service ${DESTDIR}/lib/systemd/system/
 	cp start-zeronet ${DESTDIR}/usr/bin/start-zeronet
