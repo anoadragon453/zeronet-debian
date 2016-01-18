@@ -6,7 +6,7 @@ Type=simple
 User=zeronet
 Group=zeronet
 WorkingDirectory=/etc/share/zeronet
-ExecStart=/usr/bin/start_zeronet
+ExecStart=/usr/bin/start-zeronet
 
 TimeoutSec=300
 

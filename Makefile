@@ -15,11 +15,14 @@ install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}
 	cp -r src/* ${DESTDIR}${PREFIX}/share/${APP}
 	cp daemons/*.service ${DESTDIR}/lib/systemd/system/
-	cp start_zeronet ${DESTDIR}/usr/bin/start_zeronet
+	cp start-zeronet ${DESTDIR}/usr/bin/start-zeronet
+	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/man/man1
+	install -m 644 man/start-${APP}.1.gz ${DESTDIR}/usr/share/man/man1
 uninstall:
 	rm -rf ${PREFIX}/${APP}
-	rm /etc/systemd/system/tracker.service
-	rm /etc/systemd/system/zeronet.service
+	rm /lib/systemd/system/tracker.service
+	rm /lib/systemd/system/zeronet.service
+	rm -f /usr/share/man/man1/start-${APP}.1.gz
 clean:
 	rm -f \#* \.#* debian/*.substvars debian/*.log
 	rm -rf deb.* debian/${APP}
