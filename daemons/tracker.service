@@ -1,6 +1,7 @@
 [Unit]
 Description=Torrent Tracker
 After=network.target
+After=tor.service
 [Service]
 Type=simple
 User=tracker
