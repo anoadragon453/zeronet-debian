@@ -27,14 +27,13 @@ Run the debian.sh script to generate the package.
     cd zeronet-debian
     ./debian.sh
 
-The package can be tested with:
-
-    lintian ../zeronet_*.deb
+If the package builds successfully then any lintian warnings or errors will be shown.
 
 Installation
 ------------
 
-    sudo apt-get install tor
+    sudo apt-get install tor python python-msgpack python-gevent python-pip python-pysocks bittornado
+    pip install msgpack-python --upgrade
     sudo dpkg -i zeronet_*.deb
 
 By default zeronet will be installed to **/etc/share/zeronet**.
