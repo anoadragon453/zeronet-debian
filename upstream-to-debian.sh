@@ -53,5 +53,11 @@ chmod +x src/src/lib/pybitcointools/setup.py
 chmod +x src/start.py
 chmod +x src/zeronet.py
 
+# Delete an offending binary
+rm -rf src/src/lib/PySocks/test
+
+# Remore an errant test
+rm src/src/Test/BenchmarkSsl.py
+
 echo "Synced with upstream to commit $ZERONET_COMMIT"
 exit 0

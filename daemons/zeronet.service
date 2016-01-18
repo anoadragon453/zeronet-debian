@@ -1,6 +1,5 @@
 [Unit]
 Description=Zeronet Peer
-After=syslog.target
 After=network.target
 [Service]
 Type=simple

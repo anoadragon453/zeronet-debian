@@ -14,7 +14,7 @@ source:
 install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}
 	cp -r src/* ${DESTDIR}${PREFIX}/share/${APP}
-	cp daemons/*.service ${DESTDIR}/etc/systemd/system
+	cp daemons/*.service ${DESTDIR}/lib/systemd/system/
 uninstall:
 	rm -rf ${PREFIX}/${APP}
 	rm /etc/systemd/system/tracker.service
