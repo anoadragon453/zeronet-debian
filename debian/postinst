@@ -2,15 +2,24 @@
 
 set -e
 
+APP='zeronet'
+
+if [ ! -d /etc/share/${APP} ]; then
+    mkdir /etc/share/${APP}
+fi
+
+if [ ! -d /etc/share/tracker ]; then
+    mkdir /etc/share/tracker
+fi
+
 pip install msgpack-python --upgrade
 
-if ! id -u "zeronet" >/dev/null 2>&1; then
-	useradd -d /etc/share/zeronet/ -s /bin/false zeronet
+if ! id -u "${APP}" >/dev/null 2>&1; then
+    useradd -d /etc/share/${APP}/ -s /bin/false ${APP}
 fi
-chown -R zeronet:zeronet /etc/share/zeronet
 
 if ! id -u "tracker" >/dev/null 2>&1; then
-	useradd -d /etc/share/tracker/ -s /bin/false tracker
+    useradd -d /etc/share/tracker/ -s /bin/false tracker
 fi
 if [ ! -d /etc/share/tracker ]; then
     mkdir /etc/share/tracker
@@ -22,12 +31,22 @@ if [ ! -f /etc/systemd/system/multi-user.target.wants/tracker.service ]; then
     ln -s /lib/systemd/system/tracker.service /etc/systemd/system/multi-user.target.wants/tracker.service
 fi
 
-if [ ! -f /etc/systemd/system/multi-user.target.wants/zeronet.service ]; then
-    ln -s /lib/systemd/system/zeronet.service /etc/systemd/system/multi-user.target.wants/zeronet.service
+if [ ! -f /etc/systemd/system/multi-user.target.wants/${APP}.service ]; then
+    ln -s /lib/systemd/system/${APP}.service /etc/systemd/system/multi-user.target.wants/${APP}.service
 fi
 
-if [ ! -f /etc/systemd/system/multi-user.target.wants/zeronet-mesh.service ]; then
-    ln -s /lib/systemd/system/zeronet-mesh.service /etc/systemd/system/multi-user.target.wants/zeronet-mesh.service
+if [ ! -f /etc/systemd/system/multi-user.target.wants/${APP}-mesh.service ]; then
+    ln -s /lib/systemd/system/${APP}-mesh.service /etc/systemd/system/multi-user.target.wants/${APP}-mesh.service
 fi
+
+if [ ! -f /etc/share/${APP}/data ]; then
+    ln -s /var/lib/${APP} /etc/share/${APP}/data
+fi
+
+if [ ! -f /etc/share/${APP}/bootstrap ]; then
+    ln -s /var/lib/${APP}/bootstrap /etc/share/${APP}/bootstrap
+fi
+
+chown -R ${APP}:${APP} /etc/share/${APP}
 
 exit 0

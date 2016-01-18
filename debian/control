@@ -15,7 +15,6 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
     python-msgpack,
     python-gevent,
     python-pip,
-    python-pysocks,
     bittornado
 Suggests:
     tor

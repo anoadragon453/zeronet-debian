@@ -14,7 +14,7 @@ source:
 install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}
 	mkdir -m 755 -p ${DESTDIR}/var/lib/${APP}
-	touch src/* ${DESTDIR}${PREFIX}/share/${APP}/bootstrap
+	touch ${DESTDIR}/var/lib/${APP}/bootstrap
 	cp -r src/* ${DESTDIR}${PREFIX}/share/${APP}
 	cp daemons/*.service ${DESTDIR}/lib/systemd/system/
 	cp start-zeronet ${DESTDIR}/usr/bin/start-zeronet
@@ -22,7 +22,6 @@ install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/man/man1
 	install -m 644 man/start-${APP}.1.gz ${DESTDIR}/usr/share/man/man1
 	install -m 644 man/start-${APP}-mesh.1.gz ${DESTDIR}/usr/share/man/man1
-	ln -s ${DESTDIR}/var/lib/${APP} ${DESTDIR}${PREFIX}/share/${APP}/data
 uninstall:
 	rm -rf ${PREFIX}/share/${APP}
 	rm /usr/bin/start-zeronet
