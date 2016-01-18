@@ -1,6 +1,7 @@
 [Unit]
 Description=Zeronet Peer
 After=network.target
+After=tor.service
 [Service]
 Type=simple
 User=zeronet
