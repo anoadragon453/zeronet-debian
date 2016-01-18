@@ -40,9 +40,14 @@ By default zeronet will be installed to **/etc/share/zeronet**.
 
 To enable the daemons:
 
-    sudo systemctl enable tracker
     sudo systemctl enable zeronet
-    sudo systemctl start tracker
     sudo systemctl start zeronet
+
+Or for the mesh networking version:
+
+    sudo systemctl enable tracker
+    sudo systemctl enable zeronet-mesh
+    sudo systemctl start tracker
+    sudo systemctl start zeronet-mesh
 
 You should then be able to navigate to http://127.0.0.1:43110/
