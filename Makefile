@@ -2,7 +2,7 @@ APP=zeronet
 VERSION='0.0.1'
 RELEASE='1'
 ARCH_TYPE='all'
-PREFIX?=/opt
+PREFIX?=/etc
 
 all:
 debug:
@@ -12,8 +12,8 @@ source:
 	tar -cvf ../${APP}_${VERSION}.orig.tar ../${APP}-${VERSION} --exclude-vcs --exclude=ZeroNet
 	gzip -f9n ../${APP}_${VERSION}.orig.tar
 install:
-	mkdir -m 755 -p ${DESTDIR}${PREFIX}/${APP}
-	cp -r src/* ${DESTDIR}${PREFIX}/${APP}
+	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}
+	cp -r src/* ${DESTDIR}${PREFIX}/share/${APP}
 	cp daemons/*.service ${DESTDIR}/etc/systemd/system
 uninstall:
 	rm -rf ${PREFIX}/${APP}

@@ -6,8 +6,8 @@ After=network.target
 Type=simple
 User=tracker
 Group=tracker
-WorkingDirectory=/opt/tracker
-ExecStart=/usr/bin/bttrack --port 6969 --dfile /opt/tracker/dstate --logfile /opt/tracker/tracker.log --nat_check 0 --scrape_allowed full --ipv6_enabled 0
+WorkingDirectory=/etc/share/tracker
+ExecStart=/usr/bin/bttrack --port 6969 --dfile /etc/share/tracker/dstate --logfile /etc/share/tracker/tracker.log --nat_check 0 --scrape_allowed full --ipv6_enabled 0
 
 TimeoutSec=300
 
