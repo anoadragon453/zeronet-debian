@@ -10,6 +10,7 @@ def main():
 
     main = None
     try:
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src/lib"))  # External liblary directory
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))  # Imports relative to src
         import main
         main.start()
@@ -21,7 +22,12 @@ def main():
                 if "lib.opensslVerify" in sys.modules:
                     sys.modules["lib.opensslVerify"].opensslVerify.closeLibrary()
             except Exception, err:
-                print "Error closing openssl", err
+                print "Error closing opensslVerify lib", err
+            try:
+                if "lib.pyelliptic" in sys.modules:
+                    sys.modules["lib.pyelliptic"].openssl.closeLibrary()
+            except Exception, err:
+                print "Error closing pyelliptic lib", err
 
             # Update
             update.update()

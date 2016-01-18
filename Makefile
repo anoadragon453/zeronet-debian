@@ -1,5 +1,5 @@
 APP=zeronet
-VERSION='0.0.1'
+VERSION='0.3.5'
 RELEASE='1'
 ARCH_TYPE='all'
 PREFIX?=/etc

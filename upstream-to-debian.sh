@@ -2,12 +2,12 @@
 
 SOURCE_FILE='README.md'
 ZERONET_REPO='https://github.com/HelloZeroNet/ZeroNet.git'
-ZERONET_COMMIT='675bd462556c541d65e2d95f91f899146a373aad'
+ZERONET_COMMIT='e9d2cdfd37c135cf741992580512f0ea763c53a5'
 UPSTREAM_DIR=~/.zeronet_package
 CURR_DIR=$(pwd)
 
 if [ $1 ]; then
-    ZERONET_COMMIT='675bd462556c541d65e2d95f91f899146a373aad'
+    ZERONET_COMMIT='e9d2cdfd37c135cf741992580512f0ea763c53a5'
 fi
 
 if [ ! -d gnu-social ]; then

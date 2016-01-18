@@ -13,12 +13,27 @@ class DbCursor:
         self.logging = False
 
     def execute(self, query, params=None):
-        if isinstance(params, dict):  # Make easier select and insert by allowing dict params
-            if query.startswith("SELECT") or query.startswith("DELETE"):
-                # Convert param dict to SELECT * FROM table WHERE key = ?, key2 = ? format
-                wheres = "AND ".join([key + " = ?" for key in params])
+        if isinstance(params, dict) and "?" in query:  # Make easier select and insert by allowing dict params
+            if query.startswith("SELECT") or query.startswith("DELETE") or query.startswith("UPDATE"):
+                # Convert param dict to SELECT * FROM table WHERE key = ? AND key2 = ? format
+                query_wheres = []
+                values = []
+                for key, value in params.items():
+                    if type(value) is list:
+                        if key.startswith("not__"):
+                            query_wheres.append(key.replace("not__", "")+" NOT IN ("+",".join(["?"]*len(value))+")")
+                        else:
+                            query_wheres.append(key+" IN ("+",".join(["?"]*len(value))+")")
+                        values += value
+                    else:
+                        if key.startswith("not__"):
+                            query_wheres.append(key.replace("not__", "")+" != ?")
+                        else:
+                            query_wheres.append(key+" = ?")
+                        values.append(value)
+                wheres = " AND ".join(query_wheres)
                 query = query.replace("?", wheres)
-                params = params.values()
+                params = values
             else:
                 # Convert param dict to INSERT INTO table (key, key2) VALUES (?, ?) format
                 keys = ", ".join(params.keys())
@@ -32,7 +47,7 @@ class DbCursor:
         if params:  # Query has parameters
             res = self.cursor.execute(query, params)
             if self.logging:
-                self.db.log.debug((query.replace("?", "%s") % params) + " (Done in %.4f)" % (time.time() - s))
+                self.db.log.debug(query + " " + str(params) + " (Done in %.4f)" % (time.time() - s))
         else:
             res = self.cursor.execute(query)
             if self.logging:

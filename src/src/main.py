@@ -38,12 +38,22 @@ if not os.path.isfile("%s/users.json" % config.data_dir):
 
 # Setup logging
 if config.action == "main":
+    from util import helper
+    log_file_path = "%s/debug.log" % config.log_dir
+    try:
+        helper.openLocked(log_file_path, "a")
+    except IOError as err:
+        print "Can't lock %s file, your ZeroNet client is probably already running, exiting... (%s)" % (log_file_path, err)
+        sys.exit()
+
     if os.path.isfile("%s/debug.log" % config.log_dir):  # Simple logrotate
         if os.path.isfile("%s/debug-last.log" % config.log_dir):
             os.unlink("%s/debug-last.log" % config.log_dir)
         os.rename("%s/debug.log" % config.log_dir, "%s/debug-last.log" % config.log_dir)
-    logging.basicConfig(format='[%(asctime)s] %(levelname)-8s %(name)s %(message)s',
-                        level=logging.DEBUG, filename="%s/debug.log" % config.log_dir)
+    logging.basicConfig(
+        format='[%(asctime)s] %(levelname)-8s %(name)s %(message)s',
+        level=logging.DEBUG, stream=helper.openLocked(log_file_path, "a")
+    )
 else:
     logging.basicConfig(level=logging.DEBUG, stream=open(os.devnull, "w"))  # No file logging if action is not main
 
@@ -84,10 +94,17 @@ if config.proxy:
     import urllib2
     logging.info("Patching sockets to socks proxy: %s" % config.proxy)
     config.fileserver_ip = '127.0.0.1'  # Do not accept connections anywhere but localhost
-    SocksProxy.monkeyPath(*config.proxy.split(":"))
-
+    SocksProxy.monkeyPatch(*config.proxy.split(":"))
+elif config.tor == "always":
+    from util import SocksProxy
+    import urllib2
+    logging.info("Patching sockets to tor socks proxy: %s" % config.tor_proxy)
+    config.fileserver_ip = '127.0.0.1'  # Do not accept connections anywhere but localhost
+    SocksProxy.monkeyPatch(*config.tor_proxy.split(":"))
+    config.disable_udp = True
 
 # -- Actions --
+
 
 @PluginManager.acceptPlugins
 class Actions(object):
@@ -231,34 +248,40 @@ class Actions(object):
         from File import FileServer  # We need fileserver to handle incoming file requests
         from Peer import Peer
 
-        logging.info("Creating FileServer....")
-        file_server = FileServer()
-        file_server_thread = gevent.spawn(file_server.start, check_sites=False)  # Dont check every site integrity
-        file_server.openport()
-
+        logging.info("Loading site...")
         site = SiteManager.site_manager.list()[address]
         site.settings["serving"] = True  # Serving the site even if its disabled
 
-        # Notify local client on new content
-        if config.ip_external:
-            logging.info("Sending siteReload")
-            my_peer = Peer(config.ip_external, config.fileserver_port)
-            logging.info(my_peer.request("siteReload", {"site": site.address, "inner_path": inner_path}))
+        logging.info("Creating FileServer....")
+        file_server = FileServer()
+        site.connection_server = file_server
+        file_server_thread = gevent.spawn(file_server.start, check_sites=False)  # Dont check every site integrity
+        time.sleep(0)
 
-        if peer_ip:  # Announce ip specificed
-            site.addPeer(peer_ip, peer_port)
-        else:  # Just ask the tracker
-            logging.info("Gathering peers from tracker")
-            site.announce()  # Gather peers
-
-        published = site.publish(20, inner_path)  # Push to 20 peers
-        if published > 0:
-            time.sleep(3)
-            logging.info("Serving files (max 60s)...")
-            gevent.joinall([file_server_thread], timeout=60)
-            logging.info("Done.")
+        if not file_server_thread.ready():
+            # Started fileserver
+            file_server.openport()
+            if peer_ip:  # Announce ip specificed
+                site.addPeer(peer_ip, peer_port)
+            else:  # Just ask the tracker
+                logging.info("Gathering peers from tracker")
+                site.announce()  # Gather peers
+            published = site.publish(20, inner_path)  # Push to 20 peers
+            if published > 0:
+                time.sleep(3)
+                logging.info("Serving files (max 60s)...")
+                gevent.joinall([file_server_thread], timeout=60)
+                logging.info("Done.")
+            else:
+                logging.info("No peers found, sitePublish command only works if you already have visitors serving your site")
         else:
-            logging.info("No peers found, sitePublish command only works if you already have visitors serving your site")
+            # Notify local client on new content
+            logging.info("Sending siteReload")
+            my_peer = Peer("127.0.0.1", config.fileserver_port)
+            logging.info(my_peer.request("siteReload", {"site": site.address, "inner_path": inner_path}))
+            logging.info("Sending sitePublish")
+            logging.info(my_peer.request("sitePublish", {"site": site.address, "inner_path": inner_path}))
+            logging.info("Done.")
 
     # Crypto commands
     def cryptPrivatekeyToAddress(self, privatekey=None):
@@ -281,9 +304,19 @@ class Actions(object):
         global file_server
         from Connection import ConnectionServer
         file_server = ConnectionServer("127.0.0.1", 1234)
+        from Crypt import CryptConnection
+        CryptConnection.manager.loadCerts()
 
         from Peer import Peer
         logging.info("Pinging 5 times peer: %s:%s..." % (peer_ip, int(peer_port)))
+        peer = Peer(peer_ip, peer_port)
+        for i in range(5):
+            s = time.time()
+            print peer.ping(),
+            print "Response time: %.3fs (crypt: %s)" % (time.time() - s, peer.connection.crypt)
+            time.sleep(1)
+        peer.remove()
+        print "Reconnect test..."
         peer = Peer(peer_ip, peer_port)
         for i in range(5):
             s = time.time()
@@ -295,24 +328,30 @@ class Actions(object):
         logging.info("Opening a simple connection server")
         global file_server
         from Connection import ConnectionServer
-        file_server = ConnectionServer()
+        file_server = ConnectionServer("127.0.0.1", 1234)
+        from Crypt import CryptConnection
+        CryptConnection.manager.loadCerts()
 
         from Peer import Peer
         logging.info("Getting %s/%s from peer: %s:%s..." % (site, filename, peer_ip, peer_port))
         peer = Peer(peer_ip, peer_port)
         s = time.time()
-        peer.getFile(site, filename)
         if benchmark:
             for i in range(10):
-                print peer.getFile(site, filename),
+                peer.getFile(site, filename),
             print "Response time: %.3fs" % (time.time() - s)
             raw_input("Check memory")
+        else:
+            print peer.getFile(site, filename).read()
 
     def peerCmd(self, peer_ip, peer_port, cmd, parameters):
         logging.info("Opening a simple connection server")
         global file_server
         from Connection import ConnectionServer
         file_server = ConnectionServer()
+        from Crypt import CryptConnection
+        CryptConnection.manager.loadCerts()
+
         from Peer import Peer
         peer = Peer(peer_ip, peer_port)
 

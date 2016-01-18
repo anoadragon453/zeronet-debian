@@ -4,11 +4,11 @@ ZeroNet package for Debian
 Current build
 -------------
 
-Version: 0.0.1
+Version: 0.3.5
 
 Release: 1
 
-Upstream commit: 675bd462556c541d65e2d95f91f899146a373aad
+Upstream commit: e9d2cdfd37c135cf741992580512f0ea763c53a5
 
 Updating
 --------
