@@ -1,5 +1,5 @@
 APP=zeronet
-VERSION='0.0.0'
+VERSION='0.0.1'
 RELEASE='1'
 ARCH_TYPE='all'
 PREFIX?=/opt
@@ -14,10 +14,10 @@ source:
 install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/${APP}
 	cp -r src/* ${DESTDIR}${PREFIX}/${APP}
-	cp daemons/*.service /etc/systemd/system
+	cp daemons/*.service ${DESTDIR}/etc/systemd/system
 uninstall:
 	rm -rf ${PREFIX}/${APP}
-    rm /etc/systemd/system/tracker.service
+	rm /etc/systemd/system/tracker.service
 clean:
 	rm -f \#* \.#* debian/*.substvars debian/*.log
 	rm -rf deb.* debian/${APP}
