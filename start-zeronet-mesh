@@ -4,13 +4,14 @@ cd /etc/share/zeronet
 
 zeronet_active=$(systemctl is-active zeronet)
 if [ $zeronet_active -eq 'active' ]; then
-	echo 'zeronet is active. Cannot start.'
-	exit 1
+    echo 'zeronet is active. Cannot start.'
+    exit 1
 fi
 
 # Hack to ensure that the file access port is opened
 # This is because zeronet normally relies on an internet site
 # to do this, but on a purely local mesh the internet isn't available
+cp /etc/share/zeronet/src/Site/Site.py /etc/share/zeronet/src/Site/Site.old
 sed -i 's|fileserver_port = 0|fileserver_port = config.fileserver_port\n            sys.modules["main"].file_server.port_opened = True|g' /etc/share/zeronet/src/Site/Site.py
 
 /usr/bin/python zeronet.py --ip_external $(hostname).local --trackers_file /etc/share/zeronet/bootstrap

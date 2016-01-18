@@ -4,8 +4,12 @@ cd /etc/share/zeronet
 
 mesh_active=$(systemctl is-active zeronet-mesh)
 if [ $mesh_active -eq 'active' ]]; then
-	echo 'zeronet-mesh is active. Cannot start.'
-	exit 1
+    echo 'zeronet-mesh is active. Cannot start.'
+    exit 1
+fi
+
+if [ -f /etc/share/zeronet/src/Site/Site.old ]; then
+    cp /etc/share/zeronet/src/Site/Site.old /etc/share/zeronet/src/Site/Site.py
 fi
 
 if [ ! -d /etc/tor ]; then
