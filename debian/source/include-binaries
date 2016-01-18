@@ -1,2 +1,3 @@
 src/lib/PySocks/test/mocks
 man/start-zeronet.1.gz
+man/start-zeronet-mesh.1.gz

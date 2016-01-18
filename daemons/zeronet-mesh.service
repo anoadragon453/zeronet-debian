@@ -1,0 +1,15 @@
+[Unit]
+Description=Zeronet Peer
+After=network.target
+After=tor.service
+[Service]
+Type=simple
+User=zeronet
+Group=zeronet
+WorkingDirectory=/etc/share/zeronet
+ExecStart=start-zeronet-mesh
+
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target

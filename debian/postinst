@@ -26,4 +26,8 @@ if [ ! -f /etc/systemd/system/multi-user.target.wants/zeronet.service ]; then
     ln -s /lib/systemd/system/zeronet.service /etc/systemd/system/multi-user.target.wants/zeronet.service
 fi
 
+if [ ! -f /etc/systemd/system/multi-user.target.wants/zeronet-mesh.service ]; then
+    ln -s /lib/systemd/system/zeronet-mesh.service /etc/systemd/system/multi-user.target.wants/zeronet-mesh.service
+fi
+
 exit 0

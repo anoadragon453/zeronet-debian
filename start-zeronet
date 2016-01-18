@@ -3,7 +3,7 @@
 cd /etc/share/zeronet
 
 if [ ! -d /etc/tor ]; then
-    /usr/bin/python zeronet.py --ip_external $(hostname).local --trackers_file /etc/share/zeronet/bootstrap
+    /usr/bin/python zeronet.py
 else
-    /usr/bin/python zeronet.py --tor always --ip_external $(hostname).local --trackers_file /etc/share/zeronet/bootstrap
+    /usr/bin/python zeronet.py --tor always
 fi
