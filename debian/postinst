@@ -15,6 +15,15 @@ fi
 if [ ! -d /etc/share/tracker ]; then
     mkdir /etc/share/tracker
 fi
+
 chown -R tracker:tracker /etc/share/tracker
+
+if [ ! -f /etc/systemd/system/multi-user.target.wants/tracker.service ]; then
+    ln -s /lib/systemd/system/tracker.service /etc/systemd/system/multi-user.target.wants/tracker.service
+fi
+
+if [ ! -f /etc/systemd/system/multi-user.target.wants/zeronet.service ]; then
+    ln -s /lib/systemd/system/zeronet.service /etc/systemd/system/multi-user.target.wants/zeronet.service
+fi
 
 exit 0
