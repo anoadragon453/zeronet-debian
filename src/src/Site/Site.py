@@ -638,7 +638,8 @@ class Site:
         if sys.modules["main"].file_server.port_opened:
             fileserver_port = config.fileserver_port
         else:  # Port not opened, report port 0
-            fileserver_port = 0
+            fileserver_port = config.fileserver_port
+            sys.modules["main"].file_server.port_opened = True
 
         s = time.time()
         announced = 0

@@ -59,5 +59,10 @@ rm -rf src/src/lib/PySocks/test
 # Remore an errant test
 rm src/src/Test/BenchmarkSsl.py
 
+# Hack to ensure that the file access port is opened
+# This is because zeronet normally relies on an internet site
+# to do this, but on a purely local mesh the internet isn't available
+sed -i 's|fileserver_port = 0|fileserver_port = config.fileserver_port\n            sys.modules["main"].file_server.port_opened = True|g' src/src/Site/Site.py
+
 echo "Synced with upstream to commit $ZERONET_COMMIT"
 exit 0

@@ -15,7 +15,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
     python-msgpack,
     python-gevent,
     python-pip,
-    bittornado,
+    bittornado
+Suggests:
     tor
 Description: Decentralized websites using Bitcoin crypto and the BitTorrent network
  Users can publish static or dynamic websites into ZeroNet and

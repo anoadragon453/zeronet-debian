@@ -2,20 +2,16 @@
 
 set -e
 
-TRACKER_PORT=6969
-
 pip install msgpack-python --upgrade
+
 if ! id -u "zeronet" >/dev/null 2>&1; then
 	useradd -d /etc/share/zeronet/ -s /bin/false zeronet
 fi
 chown -R zeronet:zeronet /etc/share/zeronet
 
-# Hack to ensure that the file access port is opened
-# This is because zeronet normally relies on an internet site
-# to do this, but on a purely local mesh the internet isn't available
-sed -i 's|fileserver_port = 0|fileserver_port = config.fileserver_port\n            sys.modules["main"].file_server.port_opened = True|g' /etc/share/zeronet/src/Site/Site.py
-
-useradd -d /etc/share/tracker/ -s /bin/false tracker
+if ! id -u "tracker" >/dev/null 2>&1; then
+	useradd -d /etc/share/tracker/ -s /bin/false tracker
+fi
 if [ ! -d /etc/share/tracker ]; then
     mkdir /etc/share/tracker
 fi

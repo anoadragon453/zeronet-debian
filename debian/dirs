@@ -1,2 +1,3 @@
 /etc/share/zeronet
 /lib/systemd/system
+/usr/bin

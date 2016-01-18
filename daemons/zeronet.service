@@ -6,7 +6,7 @@ Type=simple
 User=zeronet
 Group=zeronet
 WorkingDirectory=/etc/share/zeronet
-ExecStart=/usr/bin/python zeronet.py --ip_external $(hostname).local --trackers_file /etc/share/zeronet/bootstrap
+ExecStart=/usr/bin/start_zeronet
 
 TimeoutSec=300
 

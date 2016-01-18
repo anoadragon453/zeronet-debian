@@ -15,6 +15,7 @@ install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}
 	cp -r src/* ${DESTDIR}${PREFIX}/share/${APP}
 	cp daemons/*.service ${DESTDIR}/lib/systemd/system/
+	cp start_zeronet ${DESTDIR}/usr/bin/start_zeronet
 uninstall:
 	rm -rf ${PREFIX}/${APP}
 	rm /etc/systemd/system/tracker.service
