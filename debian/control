@@ -1,0 +1,31 @@
+Source: zeronet
+Section: web
+Priority: extra
+Maintainer: Bob Mottram <bob@robotics.uk.to>
+Build-Depends: debhelper (>= 9.0.0)
+Standards-Version: 3.9.4
+Homepage: https://zeronet.io
+Vcs-Git: https://github.com/HelloZeroNet/ZeroNet.git
+Vcs-Browser: https://github.com/HelloZeroNet/ZeroNet
+
+Package: zeronet
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    python,
+    python-msgpack,
+    python-gevent,
+    python-pip,
+    bittornado,
+    tor
+Description: Decentralized websites using Bitcoin crypto and the BitTorrent network
+ Users can publish static or dynamic websites into ZeroNet and
+ visitors can choose to also serve the website. Websites will
+ remain online even if it is being served by only one peer.
+ .
+ When a site is updated by its owner, all nodes serving that
+ site (previous visitors) will receive only the incremental
+ updates done to the site content.
+ .
+ ZeroNet counts with a built-in SQL database. This makes
+ content-heavy site development easy. The DB is also synced
+ with hosting nodes with incremental updates
