@@ -1,3 +1,4 @@
+#!/usr/bin/python
 ## ripemd.py - pure Python implementation of the RIPEMD-160 algorithm.
 ## Bjorn Edstrom <be@bjrn.se> 16 december 2007.
 ##

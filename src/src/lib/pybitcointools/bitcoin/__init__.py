@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from .py2specials import *
 from .py3specials import *
 from .main import *

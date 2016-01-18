@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import main as main
 import transaction as tx
 

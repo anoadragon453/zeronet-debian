@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys, re
 import binascii
 import os

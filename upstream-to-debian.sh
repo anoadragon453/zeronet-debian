@@ -35,23 +35,37 @@ rm src/LICENSE
 rm src/src/lib/PySocks/LICENSE
 rm src/src/lib/pybitcointools/LICENSE
 rm src/src/lib/subtl/LICENCE
+rm src/src/lib/pyasn1/LICENSE
+rm src/src/lib/pyelliptic/LICENSE
+rm src/src/lib/rsa/LICENSE
 
 # Make scripts executable
-chmod +x src/plugins/Sidebar/maxminddb/ipaddr.py
-chmod +x src/src/Test/BenchmarkSsl.py
-chmod +x src/src/lib/PySocks/setup.py
-chmod +x src/src/lib/PySocks/sockshandler.py
-chmod +x src/src/lib/PySocks/test/httpproxy.py
-chmod +x src/src/lib/PySocks/test/socks4server.py
-chmod +x src/src/lib/PySocks/test/test.sh
-chmod +x src/src/lib/opensslVerify/opensslVerify-alter2.py
-chmod +x src/src/lib/pybitcointools/bitcoin/bci.py
-chmod +x src/src/lib/pybitcointools/bitcoin/main.py
-chmod +x src/src/lib/pybitcointools/bitcoin/transaction.py
-chmod +x src/src/lib/pybitcointools/pybtctool
-chmod +x src/src/lib/pybitcointools/setup.py
-chmod +x src/start.py
-chmod +x src/zeronet.py
+executables=(
+	src/lib/pyelliptic/arithmetic.py
+	src/lib/pybitcointools/bitcoin/stealth.py
+	src/lib/pybitcointools/bitcoin/blocks.py
+	src/lib/pybitcointools/bitcoin/py3specials.py
+	src/lib/pybitcointools/bitcoin/py2specials.py
+	src/lib/PySocks/socks.py
+	src/lib/pyelliptic/__init__.py
+	src/lib/pybitcointools/bitcoin/composite.py
+	src/lib/PySocks/__init__.py
+	src/lib/pybitcointools/bitcoin/deterministic.py
+	src/lib/pybitcointools/bitcoin/ripemd.py
+	update.py
+	src/lib/pybitcointools/bitcoin/__init__.py
+)
+for i in "${executables[@]}"
+do
+	filename=src/$i
+	chmod +x "$filename"
+    if ! grep -q "#!/usr/bin/python" $filename; then
+		sed -i '1s|^|#!/usr/bin/python\n|' $filename
+	fi
+done
+
+# Delete empty file
+rm src/src/lib/PySocks/__init__.py
 
 # Delete an offending binary
 rm -rf src/src/lib/PySocks/test

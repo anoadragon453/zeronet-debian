@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from .main import *
 import hmac
 import hashlib
