@@ -30,5 +30,28 @@ cp -r $UPSTREAM_DIR/* src/
 # update git
 git add src
 
+# remove excess licences
+rm src/LICENSE
+rm src/src/lib/PySocks/LICENSE
+rm src/src/lib/pybitcointools/LICENSE
+rm src/src/lib/subtl/LICENCE
+
+# Make scripts executable
+chmod +x src/plugins/Sidebar/maxminddb/ipaddr.py
+chmod +x src/src/Test/BenchmarkSsl.py
+chmod +x src/src/lib/PySocks/setup.py
+chmod +x src/src/lib/PySocks/sockshandler.py
+chmod +x src/src/lib/PySocks/test/httpproxy.py
+chmod +x src/src/lib/PySocks/test/socks4server.py
+chmod +x src/src/lib/PySocks/test/test.sh
+chmod +x src/src/lib/opensslVerify/opensslVerify-alter2.py
+chmod +x src/src/lib/pybitcointools/bitcoin/bci.py
+chmod +x src/src/lib/pybitcointools/bitcoin/main.py
+chmod +x src/src/lib/pybitcointools/bitcoin/transaction.py
+chmod +x src/src/lib/pybitcointools/pybtctool
+chmod +x src/src/lib/pybitcointools/setup.py
+chmod +x src/start.py
+chmod +x src/zeronet.py
+
 echo "Synced with upstream to commit $ZERONET_COMMIT"
 exit 0

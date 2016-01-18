@@ -18,6 +18,7 @@ install:
 uninstall:
 	rm -rf ${PREFIX}/${APP}
 	rm /etc/systemd/system/tracker.service
+	rm /etc/systemd/system/zeronet.service
 clean:
 	rm -f \#* \.#* debian/*.substvars debian/*.log
 	rm -rf deb.* debian/${APP}
