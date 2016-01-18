@@ -13,11 +13,9 @@ Upstream commit: 2121612a72e05d2fbe86cb707cae33687d4e72f1
 Updating
 --------
 
-If you need to update the package to a new version then edit the above version/commit then run:
+If you need to update the package to a new version then edit the above version, release and commit and also *debian/changelog* then run:
 
-    make sync
-
-Also edit debian/changelog with the latest version at the top. The email address within the changelog must exactly correspond to your gpg key.
+    ./debian.sh
 
 Creating the package
 --------------------
