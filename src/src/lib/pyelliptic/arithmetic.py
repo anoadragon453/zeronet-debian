@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 import hashlib, re
 
 P = 2**256-2**32-2**9-2**8-2**7-2**6-2**4-1

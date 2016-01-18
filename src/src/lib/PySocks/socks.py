@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 """
 SocksiPy - Python SOCKS module.
 Version 1.5.3

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 # Copyright (C) 2010
 # Author: Yann GUIBET
 # Contact: <yannguibet@gmail.com>
