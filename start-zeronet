@@ -1,5 +1,7 @@
 #!/bin/sh
 
+ZERONET_PORT=15441
+
 cd /etc/share/zeronet
 
 # disable built in bootstrapping
@@ -25,5 +27,12 @@ fi
 if [ ! -d /etc/tor ]; then
     /usr/bin/python zeronet.py
 else
+    # add a hidden service if it doesn't exist
+    if [ ! -d /var/lib/tor/hidden_service_zeronet ]; then
+        echo "HiddenServiceDir /var/lib/tor/hidden_service_zeronet/" >> /etc/tor/torrc
+        echo "HiddenServicePort ${ZERONET_PORT} 127.0.0.1:${ZERONET_PORT}" >> /etc/tor/torrc
+        systemctl restart tor
+    fi
+
     /usr/bin/python zeronet.py --tor always
 fi
