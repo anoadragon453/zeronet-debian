@@ -14,8 +14,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
     python,
     python-msgpack,
     python-gevent,
-    python-pip,
-    bittornado
+    python-pip
 Suggests:
     tor
 Description: Decentralized websites using Bitcoin crypto and the BitTorrent network
