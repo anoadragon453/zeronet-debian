@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Creates a bootstrap file from avahi peers
+
+ZERONET_BOOTSTRAP=/var/lib/zeronet/bootstrap
+TRACKER_PORT=6969
+
+if [ ! -d /etc/avahi ]; then
+    exit 0
+fi
+
+# Create a list of bootstrap nodes
+TEMPDIR=$(mktemp -d)
+TEMPFILE_BASE=${TEMPDIR}/avahi.txt
+TEMPFILE=${TEMPDIR}/bootstrap.txt
+avahi-browse -atr > $TEMPFILE_BASE
+cat $TEMPFILE_BASE | grep "hostname =\|address =\|port =" > $TEMPFILE
+if [ ! -f $TEMPFILE ]; then
+    rm -rf $TEMPDIR
+    exit 1
+fi
+
+if [ -f $ZERONET_BOOTSTRAP.new ]; then
+    rm -f $ZERONET_BOOTSTRAP.new
+fi
+
+touch $ZERONET_BOOTSTRAP.new
+
+state=0
+address=""
+peer=""
+tracker_ctr=0
+while IFS='' read -r line || [[ -n "$line" ]]; do
+    if [ ${state} -eq "1" ]; then
+        if [[ $line == *"address ="* ]]; then
+            address=$(echo $line | awk -F '[' '{print $2}' | awk -F ']' '{print $1}')
+            tracker_url="http://$peer:$TRACKER_PORT"
+            if ! grep -q "$tracker_url" $ZERONET_BOOTSTRAP.new; then
+                echo "$tracker_url" >> $ZERONET_BOOTSTRAP.new
+                tracker_ctr=$((tracker_ctr + 1))
+            fi
+            state=0
+        fi
+    fi
+    if [[ $line == *"hostname ="* ]]; then
+        peer=$(echo $line | awk -F '[' '{print $2}' | awk -F ']' '{print $1}')
+        state=1
+    fi
+done < "$TEMPFILE"
+
+if [ ${tracker_ctr} -gt "0" ]; then
+    cp -f $ZERONET_BOOTSTRAP.new $ZERONET_BOOTSTRAP
+else
+    if [ -f $ZERONET_BOOTSTRAP ]; then
+        rm -f $ZERONET_BOOTSTRAP
+    fi
+fi
+rm -f $ZERONET_BOOTSTRAP.new
+chown -R zeronet:zeronet /var/lib/zeronet
+
+rm -rf $TEMPDIR

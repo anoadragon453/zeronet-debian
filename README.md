@@ -45,9 +45,8 @@ To enable the daemons:
 
 Or for the mesh networking version:
 
-    sudo systemctl enable tracker
+    sudo apt-get install avahi-utils avahi-autoipd avahi-dnsconfd
     sudo systemctl enable zeronet-mesh
-    sudo systemctl start tracker
     sudo systemctl start zeronet-mesh
 
 You should then be able to navigate to http://127.0.0.1:43110/

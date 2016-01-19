@@ -2,6 +2,16 @@
 
 cd /etc/share/zeronet
 
+# disable built in bootstrapping
+if [ -d /etc/share/zeronetplugins/Bootstrapper ]; then
+    mv /etc/share/zeronetplugins/Bootstrapper /etc/share/zeronetplugins/disabled-Bootstrapper
+fi
+
+# remove cron entry for finding peers
+if grep -q "zeronet-findpeers" /etc/crontab
+   sed -i '/zeronet-findpeers/d' /etc/crontab
+fi
+
 mesh_active=$(systemctl is-active zeronet-mesh)
 if [ $mesh_active -eq 'active' ]]; then
     echo 'zeronet-mesh is active. Cannot start.'
