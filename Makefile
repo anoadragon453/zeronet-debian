@@ -29,7 +29,6 @@ uninstall:
 	rm /usr/bin/zeronet-findpeers
 	rm /usr/bin/start-zeronet
 	rm /usr/bin/start-zeronet-mesh
-	rm /lib/systemd/system/tracker.service
 	rm /lib/systemd/system/zeronet.service
 	rm /lib/systemd/system/zeronet-mesh.service
 	rm -f /usr/share/man/man1/start-${APP}.1.gz

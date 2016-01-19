@@ -8,27 +8,10 @@ if [ ! -d /etc/share/${APP} ]; then
     mkdir /etc/share/${APP}
 fi
 
-if [ ! -d /etc/share/tracker ]; then
-    mkdir /etc/share/tracker
-fi
-
 pip install msgpack-python --upgrade
 
 if ! id -u "${APP}" >/dev/null 2>&1; then
     useradd -d /etc/share/${APP}/ -s /bin/false ${APP}
-fi
-
-if ! id -u "tracker" >/dev/null 2>&1; then
-    useradd -d /etc/share/tracker/ -s /bin/false tracker
-fi
-if [ ! -d /etc/share/tracker ]; then
-    mkdir /etc/share/tracker
-fi
-
-chown -R tracker:tracker /etc/share/tracker
-
-if [ ! -f /etc/systemd/system/multi-user.target.wants/tracker.service ]; then
-    ln -s /lib/systemd/system/tracker.service /etc/systemd/system/multi-user.target.wants/tracker.service
 fi
 
 if [ ! -f /etc/systemd/system/multi-user.target.wants/${APP}.service ]; then

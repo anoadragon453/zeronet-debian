@@ -32,7 +32,7 @@ If the package builds successfully then any lintian warnings or errors will be s
 Installation
 ------------
 
-    sudo apt-get install tor python python-msgpack python-gevent python-pip bittornado
+    sudo apt-get install tor python python-msgpack python-gevent python-pip
     pip install msgpack-python --upgrade
     sudo dpkg -i zeronet_*.deb
 

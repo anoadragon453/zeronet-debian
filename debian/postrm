@@ -8,20 +8,12 @@ if [ -d /etc/share/${APP} ]; then
    rm -rf /etc/share/${APP}
 fi
 
-if [ -f /etc/systemd/system/multi-user.target.wants/tracker.service ]; then
-    rm /etc/systemd/system/multi-user.target.wants/tracker.service
-fi
-
 if [ -f /etc/systemd/system/multi-user.target.wants/${APP}.service ]; then
     rm /etc/systemd/system/multi-user.target.wants/${APP}.service
 fi
 
 if [ -f /etc/systemd/system/multi-user.target.wants/${APP}-mesh.service ]; then
     rm /etc/systemd/system/multi-user.target.wants/${APP}-mesh.service
-fi
-
-if [ -f /lib/systemd/system/tracker.service ]; then
-   rm /lib/systemd/system/tracker.service
 fi
 
 if [ -f /lib/systemd/system/${APP}.service ]; then
