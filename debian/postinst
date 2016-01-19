@@ -30,6 +30,20 @@ if [ ! -f /etc/share/${APP}/bootstrap ]; then
     ln -s /var/lib/${APP}/bootstrap /etc/share/${APP}/bootstrap
 fi
 
+if [ -d /etc/tor ]; then
+    # add a hidden service if it doesn't exist
+    if [ ! -d /var/lib/tor/hidden_service_zeronet ]; then
+        echo "HiddenServiceDir /var/lib/tor/hidden_service_zeronet/" >> /etc/tor/torrc
+        echo "HiddenServicePort ${ZERONET_PORT} 127.0.0.1:${ZERONET_PORT}" >> /etc/tor/torrc
+    fi
+fi
+
+# update the bootstrap list periodically
+if ! grep -q "zeronet-findpeers" /etc/crontab; then
+   echo "*/5 *  * * *   ${APP}    zeronet-findpeers" >> /etc/crontab
+fi
+
 chown -R ${APP}:${APP} /etc/share/${APP}
+chown -R ${APP}:${APP} /var/lib/${APP}
 
 exit 0

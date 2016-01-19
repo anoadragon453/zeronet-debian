@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ZERONET_PORT=15441
 
@@ -9,13 +9,8 @@ if [ -d /etc/share/zeronet/plugins/Bootstrapper ]; then
     mv /etc/share/zeronet/plugins/Bootstrapper /etc/share/zeronet/plugins/disabled-Bootstrapper
 fi
 
-# remove cron entry for finding peers
-if grep -q "zeronet-findpeers" /etc/crontab; then
-   sed -i '/zeronet-findpeers/d' /etc/crontab
-fi
-
 mesh_active=$(systemctl is-active zeronet-mesh)
-if [ $mesh_active -eq 'active' ]]; then
+if [[ "$mesh_active" == "active" ]]; then
     echo 'zeronet-mesh is active. Cannot start.'
     exit 1
 fi
@@ -27,12 +22,5 @@ fi
 if [ ! -d /etc/tor ]; then
     /usr/bin/python zeronet.py
 else
-    # add a hidden service if it doesn't exist
-    if [ ! -d /var/lib/tor/hidden_service_zeronet ]; then
-        echo "HiddenServiceDir /var/lib/tor/hidden_service_zeronet/" >> /etc/tor/torrc
-        echo "HiddenServicePort ${ZERONET_PORT} 127.0.0.1:${ZERONET_PORT}" >> /etc/tor/torrc
-        systemctl restart tor
-    fi
-
     /usr/bin/python zeronet.py --tor always
 fi

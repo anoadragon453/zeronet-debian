@@ -23,3 +23,7 @@ fi
 if [ -f /lib/systemd/system/${APP}-mesh.service ]; then
    rm /lib/systemd/system/${APP}-mesh.service
 fi
+
+if grep -q "zeronet-findpeers" /etc/crontab; then
+	sed -i '/zeronet-findpeers/d' /etc/crontab
+fi
