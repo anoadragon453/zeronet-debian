@@ -53,11 +53,11 @@ fi
 # restore the parent directory name
 mv ../${DIR} ../${APP}-debian
 
-if [ ! -f ../zeronet_${VERSION}-${RELEASE}_all.deb ]; then
-	echo "Failed to build ../zeronet_${VERSION}-${RELEASE}_all.deb"
+if [ ! -f ../${APP}_${VERSION}-${RELEASE}_all.deb ]; then
+	echo "Failed to build ../${APP}_${VERSION}-${RELEASE}_all.deb"
 	exit 1
 fi
 
-lintian ../zeronet_${VERSION}-${RELEASE}_all.deb
+lintian ../${APP}_${VERSION}-${RELEASE}_all.deb
 
 exit 0
