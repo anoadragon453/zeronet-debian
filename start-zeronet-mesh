@@ -9,16 +9,20 @@ if [ $zeronet_active -eq 'active' ]; then
 fi
 
 # enable built in bootstrapping
-if [ -d /etc/share/zeronetplugins/disabled-Bootstrapper ]; then
-    mv /etc/share/zeronetplugins/disabled-Bootstrapper /etc/share/zeronetplugins/Bootstrapper
+if [ -d /etc/share/zeronet/plugins/disabled-Bootstrapper ]; then
+    mv /etc/share/zeronet/plugins/disabled-Bootstrapper /etc/share/zeronet/plugins/Bootstrapper
 fi
 
 # create a bootstrap list
-zeronet-findpeers
+if [ -f /usr/local/bin/zeronet-findpeers ]; then
+    /usr/local/bin/zeronet-findpeers
+else
+    /usr/bin/zeronet-findpeers
+fi
 
 # update the bootstrap list periodically
-if ! grep -q "zeronet-findpeers" /etc/crontab
-   echo "*/5 *	* * *	root    zeronet-findpeers" >> /etc/crontab
+if ! grep -q "zeronet-findpeers" /etc/crontab; then
+   echo "*/5 *  * * *   root    zeronet-findpeers" >> /etc/crontab
 fi
 
 # Hack to ensure that the file access port is opened

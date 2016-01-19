@@ -3,12 +3,12 @@
 cd /etc/share/zeronet
 
 # disable built in bootstrapping
-if [ -d /etc/share/zeronetplugins/Bootstrapper ]; then
-    mv /etc/share/zeronetplugins/Bootstrapper /etc/share/zeronetplugins/disabled-Bootstrapper
+if [ -d /etc/share/zeronet/plugins/Bootstrapper ]; then
+    mv /etc/share/zeronet/plugins/Bootstrapper /etc/share/zeronet/plugins/disabled-Bootstrapper
 fi
 
 # remove cron entry for finding peers
-if grep -q "zeronet-findpeers" /etc/crontab
+if grep -q "zeronet-findpeers" /etc/crontab; then
    sed -i '/zeronet-findpeers/d' /etc/crontab
 fi
 
