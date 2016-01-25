@@ -7,7 +7,7 @@ UPSTREAM_DIR=~/.zeronet_package
 CURR_DIR=$(pwd)
 
 if [ $1 ]; then
-    ZERONET_COMMIT='2121612a72e05d2fbe86cb707cae33687d4e72f1'
+    ZERONET_COMMIT=$1
 fi
 
 if [ ! -d gnu-social ]; then
